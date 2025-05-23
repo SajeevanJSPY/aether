@@ -1,0 +1,13 @@
+syntax = "proto3";
+package aether.aether.v1;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/aether-proj/aether/x/aether/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (amino.name) = "aether/x/aether/Params";
+  option (gogoproto.equal) = true;
+}

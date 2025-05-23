@@ -1,0 +1,17 @@
+syntax = "proto3";
+package aether.aether.v1;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "aether/aether/v1/params.proto";
+
+option go_package = "github.com/aether-proj/aether/x/aether/types";
+
+// GenesisState defines the aether module's genesis state.
+message GenesisState {
+  // params defines all the parameters of the module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
