@@ -69,9 +69,10 @@ proto-deps:
 	@echo "Installing proto deps"
 	@echo "Proto deps present, run 'go tool' to see them"
 
+PROTO_BUILDER_IMAGE=ghcr.io/cosmos/proto-builder:latest
 proto-gen:
 	@echo "Generating protobuf files..."
-	@ignite generate proto-go --yes
+	@docker run --rm -u 0 -v $(CURDIR):/workspace --workdir /workspace $(PROTO_BUILDER_IMAGE) sh ./scripts/protocgen.sh
 
 .PHONY: proto-gen
 
