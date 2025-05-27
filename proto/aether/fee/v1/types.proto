@@ -1,0 +1,40 @@
+syntax = "proto3";
+package aether.fee.v1;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+
+option go_package = "github.com/aether-proj/aether/x/fee/types";
+
+message TotalFee {
+  string amount = 1 [
+    (gogoproto.nullable) = false,
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (cosmos_proto.scalar) = "cosmos.Dec"
+  ];
+}
+
+message Params {
+  // trader fee
+  string trader_fee_percentage = 1 [
+    (gogoproto.nullable) = false,
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (cosmos_proto.scalar) = "cosmos.Dec"
+  ];
+
+  // protocol share from the total fee collected from the protocol
+  string protocol_fee_percentage = 2 [
+    (gogoproto.nullable) = false,
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (cosmos_proto.scalar) = "cosmos.Dec"
+  ];
+
+  // liquidity providers share from the total fee collected from the protocol
+  string lp_fee_percentage = 3 [
+    (gogoproto.nullable) = false,
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (cosmos_proto.scalar) = "cosmos.Dec"
+  ];
+}
+
+

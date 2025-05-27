@@ -71,7 +71,8 @@ import (
 
 	_ "github.com/aether-proj/aether/x/aether/module"
 	aethermoduletypes "github.com/aether-proj/aether/x/aether/types"
-
+	_ "github.com/aether-proj/aether/x/fee/module"
+	feemoduletypes "github.com/aether-proj/aether/x/fee/types"
 	_ "github.com/aether-proj/aether/x/template/module"
 	templatemoduletypes "github.com/aether-proj/aether/x/template/types"
 )
@@ -173,6 +174,7 @@ var (
 						icatypes.ModuleName,
 						// chain modules
 						aethermoduletypes.ModuleName,
+						feemoduletypes.ModuleName,
 					},
 				}),
 			},
@@ -275,6 +277,10 @@ var (
 			{
 				Name:   templatemoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&templatemoduletypes.Module{}),
+			},
+			{
+				Name:   feemoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&feemoduletypes.Module{}),
 			},
 		},
 	})

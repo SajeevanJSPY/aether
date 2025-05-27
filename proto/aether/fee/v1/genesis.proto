@@ -1,0 +1,11 @@
+syntax = "proto3";
+package aether.fee.v1;
+
+import "aether/fee/v1/types.proto";
+
+option go_package = "github.com/aether-proj/aether/x/fee/types";
+
+message GenesisState {
+  Params params = 1;
+}
+

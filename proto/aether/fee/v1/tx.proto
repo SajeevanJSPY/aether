@@ -1,0 +1,44 @@
+syntax = "proto3";
+package aether.fee.v1;
+
+import "gogoproto/gogo.proto";
+import "amino/amino.proto";
+import "cosmos_proto/cosmos.proto";
+import "cosmos/msg/v1/msg.proto";
+
+option go_package = "github.com/aether-proj/aether/x/fee/types";
+
+service Msg {
+  option (cosmos.msg.v1.service) = true;
+
+  // update the fee parameters
+  rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
+}
+
+message MsgUpdateParams {
+  option (amino.name) = "aether/fee/update-params";
+  option (cosmos.msg.v1.signer) = "authority";
+
+  string authority = 1;
+
+  string trader_fee_percentage = 2 [
+    (gogoproto.nullable) = false,
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (cosmos_proto.scalar) = "cosmos.Dec"
+  ];
+
+  string protocol_fee_percentage = 3 [
+    (gogoproto.nullable) = false,
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (cosmos_proto.scalar) = "cosmos.Dec"
+  ];
+
+  string lp_fee_percentage = 4 [
+    (gogoproto.nullable) = false,
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (cosmos_proto.scalar) = "cosmos.Dec"
+  ];
+}
+
+message MsgUpdateParamsResponse {}
+
