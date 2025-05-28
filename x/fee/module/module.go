@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"cosmossdk.io/core/appmodule"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
@@ -17,20 +18,21 @@ import (
 )
 
 var (
-	_ module.AppModuleBasic = (*AppModule)(nil)
-	_ module.HasGenesis     = (*AppModule)(nil)
-	_ module.AppModule      = (*AppModule)(nil)
+	_ module.AppModuleBasic   = AppModule{}
+	_ module.HasGenesisBasics = AppModule{}
+
+	_ appmodule.AppModule        = AppModule{}
+	_ module.HasConsensusVersion = AppModule{}
+	_ module.HasGenesis          = AppModule{}
 )
 
 type AppModule struct {
 	keeper keeper.Keeper
-	cdc    codec.Codec
 }
 
-func NewAppModule(k keeper.Keeper, cdc codec.Codec) AppModule {
+func NewAppModule(k keeper.Keeper) AppModule {
 	return AppModule{
 		keeper: k,
-		cdc:    cdc,
 	}
 }
 
@@ -60,9 +62,9 @@ func (am AppModule) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 }
 
 // ValidateGenesis used to validate the GenesisState, given in its json.RawMessage form.
-func (am AppModule) ValidateGenesis(cdc codec.JSONCodec, encodingConfig client.TxEncodingConfig, bz json.RawMessage) error {
+func (am AppModule) ValidateGenesis(cdc codec.JSONCodec, encodingConfig client.TxEncodingConfig, gs json.RawMessage) error {
 	var genState types.GenesisState
-	if err := cdc.UnmarshalJSON(bz, &genState); err != nil {
+	if err := cdc.UnmarshalJSON(gs, &genState); err != nil {
 		return fmt.Errorf("failed to unmarshal %s genesis state: %w", types.ModuleName, err)
 	}
 
@@ -72,23 +74,16 @@ func (am AppModule) ValidateGenesis(cdc codec.JSONCodec, encodingConfig client.T
 // InitGenesis performs the module's genesis initialization. It returns no validator updates.
 func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, gs json.RawMessage) {
 	var genState types.GenesisState
-	// Initialize global index to index in genesis state
-	if err := am.cdc.UnmarshalJSON(gs, &genState); err != nil {
-		panic(fmt.Errorf("failed to unmarshal %s genesis state: %w", types.ModuleName, err))
-	}
+	cdc.MustUnmarshalJSON(gs, &genState)
 
 	am.keeper.InitGenesis(ctx, genState)
 }
 
 // ExportGenesis returns the module's exported genesis state as raw JSON bytes.
 func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.RawMessage {
-	genState, err := am.keeper.ExportGenesis(ctx)
-	if err != nil {
-		return nil
-	}
+	genState := am.keeper.ExportGenesis(ctx)
 
-	genStates, _ := cdc.MarshalJSON(genState)
-	return genStates
+	return cdc.MustMarshalJSON(genState)
 }
 
 func (AppModule) ConsensusVersion() uint64 { return 1 }

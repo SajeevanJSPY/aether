@@ -2,13 +2,14 @@ package keeper
 
 import (
 	"context"
-	"fmt"
-
 	"cosmossdk.io/collections"
 	"cosmossdk.io/core/address"
 	corestore "cosmossdk.io/core/store"
+	"cosmossdk.io/log"
 	"cosmossdk.io/math"
+	"fmt"
 	"github.com/cosmos/cosmos-sdk/codec"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/aether-proj/aether/x/fee/types"
 )
@@ -83,23 +84,31 @@ func (k Keeper) GetAuthority() string {
 	return string(k.authority)
 }
 
+func (k Keeper) GetParams(ctx context.Context) types.Params {
+	params, err := k.Params.Get(ctx)
+	if err != nil {
+		panic("failed to get the params")
+	}
+	return params
+}
+
 func (k Keeper) GetTraderFeePercentage(ctx context.Context) math.LegacyDec {
-	params, _ := k.Params.Get(ctx)
-	return params.TraderFeePercentage
+	return k.GetParams(ctx).TraderFeePercentage
 }
 
 func (k Keeper) GetProtocolFeePercentage(ctx context.Context) math.LegacyDec {
-	params, _ := k.Params.Get(ctx)
-	return params.ProtocolFeePercentage
+	return k.GetParams(ctx).ProtocolFeePercentage
 }
 
 func (k Keeper) GetLpFeePercentage(ctx context.Context) math.LegacyDec {
-	params, _ := k.Params.Get(ctx)
-	return params.LpFeePercentage
+	return k.GetParams(ctx).LpFeePercentage
 }
 
 func (k Keeper) GetCollectedTotalFee(ctx context.Context) math.LegacyDec {
-	fees, _ := k.TotalFees.Get(ctx)
+	fees, err := k.TotalFees.Get(ctx)
+	if err != nil {
+		panic(err)
+	}
 	return fees.Amount
 }
 
@@ -109,4 +118,8 @@ func (k Keeper) UpdateParams(ctx context.Context, params types.Params) {
 	if err != nil {
 		panic("failed to set the protocol params")
 	}
+}
+
+func (k Keeper) Logger(ctx sdk.Context) log.Logger {
+	return ctx.Logger().With("module", fmt.Sprintf("x/%s", types.ModuleName))
 }

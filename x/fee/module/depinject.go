@@ -52,7 +52,7 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		authority,
 	)
 
-	m := NewAppModule(k, in.Cdc)
+	m := NewAppModule(k)
 
 	return ModuleOutputs{FeeKeeper: k, Module: m}
 }
