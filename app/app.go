@@ -48,9 +48,7 @@ import (
 	"github.com/aether-proj/aether/docs"
 	aethermodulekeeper "github.com/aether-proj/aether/x/aether/keeper"
 
-	// template module
 	feemodulekeeper "github.com/aether-proj/aether/x/fee/keeper"
-	templatemodulekeeper "github.com/aether-proj/aether/x/template/keeper"
 )
 
 const (
@@ -103,7 +101,6 @@ type App struct {
 	TransferKeeper      ibctransferkeeper.Keeper
 
 	AetherKeeper   aethermodulekeeper.Keeper
-	TemplateKeeper templatemodulekeeper.Keeper
 	FeeKeeper      feemodulekeeper.Keeper
 
 	// simulation manager
@@ -181,7 +178,6 @@ func New(
 		&app.CircuitBreakerKeeper,
 		&app.ParamsKeeper,
 		&app.AetherKeeper,
-		&app.TemplateKeeper,
 		&app.FeeKeeper,
 	); err != nil {
 		panic(err)

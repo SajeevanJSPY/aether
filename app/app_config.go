@@ -73,8 +73,6 @@ import (
 	aethermoduletypes "github.com/aether-proj/aether/x/aether/types"
 	_ "github.com/aether-proj/aether/x/fee/module"
 	feemoduletypes "github.com/aether-proj/aether/x/fee/types"
-	_ "github.com/aether-proj/aether/x/template/module"
-	templatemoduletypes "github.com/aether-proj/aether/x/template/types"
 )
 
 var (
@@ -128,7 +126,6 @@ var (
 						ibcexported.ModuleName,
 						// chain modules
 						aethermoduletypes.ModuleName,
-						templatemoduletypes.ModuleName,
 					},
 					EndBlockers: []string{
 						govtypes.ModuleName,
@@ -137,7 +134,6 @@ var (
 						group.ModuleName,
 						// chain modules
 						aethermoduletypes.ModuleName,
-						templatemoduletypes.ModuleName,
 					},
 					// The following is mostly only needed when ModuleName != StoreKey name.
 					OverrideStoreKeys: []*runtimev1alpha1.StoreKeyConfig{
@@ -273,10 +269,6 @@ var (
 			{
 				Name:   aethermoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&aethermoduletypes.Module{}),
-			},
-			{
-				Name:   templatemoduletypes.ModuleName,
-				Config: appconfig.WrapAny(&templatemoduletypes.Module{}),
 			},
 			{
 				Name:   feemoduletypes.ModuleName,
