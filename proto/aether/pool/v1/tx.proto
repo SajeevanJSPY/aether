@@ -1,0 +1,102 @@
+syntax = "proto3";
+package aether.pool.v1;
+
+import "gogoproto/gogo.proto";
+import "amino/amino.proto";
+import "cosmos_proto/cosmos.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos/msg/v1/msg.proto";
+
+option go_package = "github.com/aether-proj/aether/x/pool/types";
+
+service Msg {
+  option (cosmos.msg.v1.service) = true;
+
+  rpc CreatePool(MsgCreatePool) returns (MsgCreatePoolResponse);
+  rpc RemovePool(MsgRemovePool) returns (MsgRemovePoolResponse);
+  rpc Deposit(MsgDeposit) returns (MsgDepositResponse);
+  rpc Withdraw(MsgWithdraw) returns (MsgWithdrawResponse);
+  rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
+}
+
+message MsgCreatePool {
+  option (amino.name) = "pool/pool-create";
+  option (cosmos.msg.v1.signer) = "authority";
+
+  string authority = 1;
+  // maximum supply can be used for the protocols
+  string max_supply = 2 [
+    (gogoproto.nullable) = false,
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (cosmos_proto.scalar) = "cosmos.Int"
+  ];
+  string denom = 3;
+}
+
+message MsgCreatePoolResponse {
+  uint64 pool_id = 1;
+}
+
+message MsgRemovePool {
+  option (amino.name) = "pool/pool-create";
+  option (cosmos.msg.v1.signer) = "authority";
+
+  string authority = 1;
+  uint64 pool_id = 2;
+  string reason = 3;
+}
+
+message MsgRemovePoolResponse {}
+
+message MsgDeposit {
+  option (amino.name) = "pool/pool-deposit";
+  option (cosmos.msg.v1.signer) = "depositor";
+
+  string depositor = 1;
+  string deposit_amount = 2 [
+    (gogoproto.nullable) = false,
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (cosmos_proto.scalar) = "cosmos.Int"
+  ];
+  uint64 pool_id = 3;
+}
+
+message MsgDepositResponse {
+  string shares = 1 [
+    (gogoproto.nullable) = false,
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (cosmos_proto.scalar) = "cosmos.Int"
+  ];
+}
+
+message MsgWithdraw {
+  option (amino.name) = "pool/pool-withdraw";
+  option (cosmos.msg.v1.signer) = "withdrawer";
+
+  string withdrawer = 1;
+  string withdraw_amount = 2 [
+    (gogoproto.nullable) = false,
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (cosmos_proto.scalar) = "cosmos.Int"
+  ];
+  uint64 pool_id = 3;
+  bool full_withdraw = 4;
+}
+
+message MsgWithdrawResponse {
+  string shares_left = 1 [
+    (gogoproto.nullable) = false,
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (cosmos_proto.scalar) = "cosmos.Int"
+  ];
+}
+
+message MsgUpdateParams {
+  option (amino.name) = "pool/update-params";
+  option (cosmos.msg.v1.signer) = "authority";
+
+  string authority = 1;
+}
+
+message MsgUpdateParamsResponse {}
+

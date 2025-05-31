@@ -1,0 +1,26 @@
+syntax = "proto3";
+package aether.pool.v1;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+
+option go_package = "github.com/aether-proj/aether/x/pool/types";
+
+message Params {
+  uint64 max_pools = 1;
+  string min_deposit_amount = 2 [
+    (gogoproto.nullable) = false,
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (cosmos_proto.scalar) = "cosmos.Int"
+  ];
+  string max_withdraw_amount = 3 [
+    (gogoproto.nullable) = false,
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (cosmos_proto.scalar) = "cosmos.Int"
+  ];
+}
+
+message GenesisState {
+  Params params = 1;
+}
+

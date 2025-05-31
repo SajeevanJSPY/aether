@@ -49,6 +49,7 @@ import (
 	aethermodulekeeper "github.com/aether-proj/aether/x/aether/keeper"
 
 	feemodulekeeper "github.com/aether-proj/aether/x/fee/keeper"
+	poolmodulekeeper "github.com/aether-proj/aether/x/pool/keeper"
 )
 
 const (
@@ -102,6 +103,7 @@ type App struct {
 
 	AetherKeeper aethermodulekeeper.Keeper
 	FeeKeeper    feemodulekeeper.Keeper
+	PoolKeeper   poolmodulekeeper.Keeper
 
 	// simulation manager
 	sm *module.SimulationManager
@@ -179,6 +181,7 @@ func New(
 		&app.ParamsKeeper,
 		&app.AetherKeeper,
 		&app.FeeKeeper,
+		&app.PoolKeeper,
 	); err != nil {
 		panic(err)
 	}

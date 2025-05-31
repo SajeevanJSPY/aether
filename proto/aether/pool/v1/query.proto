@@ -1,0 +1,79 @@
+syntax = "proto3";
+package aether.pool.v1;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/aether-proj/aether/x/pool/types";
+
+service Query {
+  rpc GetPoolInfo(QueryGetPoolInfoRequest) returns (QueryGetPoolInfoResponse);
+  rpc GetAllPoolInfos(QueryGetAllPoolInfosRequest) returns (QueryGetAllPoolInfosResponse);
+  rpc GetUserInfo(QueryGetUserInfoRequest) returns (QueryGetUserInfoResponse);
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse);
+}
+
+message QueryGetPoolInfoRequest {
+  uint64 pool_id = 1;
+}
+
+message QueryGetPoolInfoResponse {
+  string denom = 1;
+  cosmos.base.v1beta1.DecCoin total_amount = 2;
+  string total_shares = 3 [
+    (gogoproto.nullable) = false,
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (cosmos_proto.scalar) = "cosmos.Int"
+  ];
+  string total_used = 4 [
+    (gogoproto.nullable) = false,
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (cosmos_proto.scalar) = "cosmos.Int"
+  ];
+
+  google.protobuf.Timestamp created_at = 5 [
+    (gogoproto.nullable) = false,
+    (gogoproto.stdtime) = true
+  ];
+}
+
+message QueryGetAllPoolInfosRequest {}
+
+message QueryGetAllPoolInfosResponse {
+  repeated QueryGetPoolInfoResponse responses = 1;
+}
+
+message QueryGetUserInfoRequest {
+  string user = 1;
+}
+
+message QueryGetUserInfoResponse {
+  repeated Info info = 1;
+  message Info {
+    uint64 pool_id = 1;
+    string shares = 2 [
+      (gogoproto.nullable) = false,
+      (gogoproto.customtype) = "cosmossdk.io/math.Int",
+      (cosmos_proto.scalar) = "cosmos.Int"
+    ];
+  }
+}
+
+message QueryParamsRequest {}
+
+message QueryParamsResponse {
+  uint64 max_pools = 1;
+  string min_deposit_amount = 2 [
+    (gogoproto.nullable) = false,
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (cosmos_proto.scalar) = "cosmos.Int"
+  ];
+  string max_withdraw_amount = 3 [
+    (gogoproto.nullable) = false,
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (cosmos_proto.scalar) = "cosmos.Int"
+  ];
+}
+
