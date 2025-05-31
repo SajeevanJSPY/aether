@@ -1,4 +1,4 @@
-package template
+package fee
 
 import (
 	"cosmossdk.io/core/address"

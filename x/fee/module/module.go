@@ -1,4 +1,4 @@
-package template
+package fee
 
 import (
 	"encoding/json"

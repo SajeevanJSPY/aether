@@ -1,4 +1,4 @@
-package template
+package fee
 
 import (
 	"github.com/cosmos/cosmos-sdk/types/module"

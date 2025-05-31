@@ -100,8 +100,8 @@ type App struct {
 	ICAHostKeeper       icahostkeeper.Keeper
 	TransferKeeper      ibctransferkeeper.Keeper
 
-	AetherKeeper   aethermodulekeeper.Keeper
-	FeeKeeper      feemodulekeeper.Keeper
+	AetherKeeper aethermodulekeeper.Keeper
+	FeeKeeper    feemodulekeeper.Keeper
 
 	// simulation manager
 	sm *module.SimulationManager

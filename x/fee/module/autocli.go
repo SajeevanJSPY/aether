@@ -1,4 +1,4 @@
-package template
+package fee
 
 import (
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
