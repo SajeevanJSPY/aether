@@ -9,23 +9,24 @@ import "google/protobuf/timestamp.proto";
 option go_package = "github.com/aether-proj/aether/x/pool/types";
 
 message Pool {
-  string denom = 1;
+  string creator = 1;
   cosmos.base.v1beta1.DecCoin total_amount = 2;
-  string total_shares = 3 [
+  string quote_denom = 3;
+  string total_shares = 4 [
     (gogoproto.nullable) = false,
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (cosmos_proto.scalar) = "cosmos.Int"
   ];
-  string total_used = 4 [
+  string reserved_amount = 5 [
     (gogoproto.nullable) = false,
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (cosmos_proto.scalar) = "cosmos.Int"
   ];
-
-  google.protobuf.Timestamp created_at = 5 [
+  google.protobuf.Timestamp created_at = 6 [
     (gogoproto.nullable) = false,
     (gogoproto.stdtime) = true
   ];
+  bool is_paused = 7;
 }
 
 message Deposit {

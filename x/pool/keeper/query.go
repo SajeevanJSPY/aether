@@ -25,11 +25,10 @@ func (q queryServer) GetPoolInfo(ctx context.Context, req *types.QueryGetPoolInf
 	pool := q.Keeper.GetPool(ctx, req.PoolId)
 
 	return &types.QueryGetPoolInfoResponse{
-		Denom:       pool.Denom,
-		TotalAmount: pool.TotalAmount,
-		TotalShares: pool.TotalShares,
-		TotalUsed:   pool.TotalUsed,
-		CreatedAt:   pool.CreatedAt,
+		TotalAmount:    pool.TotalAmount,
+		TotalShares:    pool.TotalShares,
+		ReservedAmount: pool.ReservedAmount,
+		CreatedAt:      pool.CreatedAt,
 	}, nil
 }
 
@@ -42,11 +41,10 @@ func (q queryServer) GetAllPoolInfos(ctx context.Context, req *types.QueryGetAll
 		pool := q.Keeper.GetPool(ctx, i)
 
 		pool_info := &types.QueryGetPoolInfoResponse{
-			Denom:       pool.Denom,
-			TotalAmount: pool.TotalAmount,
-			TotalShares: pool.TotalShares,
-			TotalUsed:   pool.TotalUsed,
-			CreatedAt:   pool.CreatedAt,
+			TotalAmount:    pool.TotalAmount,
+			TotalShares:    pool.TotalShares,
+			ReservedAmount: pool.ReservedAmount,
+			CreatedAt:      pool.CreatedAt,
 		}
 		pools = append(pools, pool_info)
 

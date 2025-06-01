@@ -30,7 +30,8 @@ message MsgCreatePool {
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (cosmos_proto.scalar) = "cosmos.Int"
   ];
-  string denom = 3;
+  string base_denom = 3;
+  string quote_denom = 4;
 }
 
 message MsgCreatePoolResponse {

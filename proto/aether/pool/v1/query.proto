@@ -20,7 +20,6 @@ message QueryGetPoolInfoRequest {
 }
 
 message QueryGetPoolInfoResponse {
-  string denom = 1;
   cosmos.base.v1beta1.DecCoin total_amount = 2;
   string total_shares = 3 [
     (gogoproto.nullable) = false,
@@ -32,8 +31,12 @@ message QueryGetPoolInfoResponse {
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (cosmos_proto.scalar) = "cosmos.Int"
   ];
-
-  google.protobuf.Timestamp created_at = 5 [
+  string reserved_amount = 5 [
+    (gogoproto.nullable) = false,
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (cosmos_proto.scalar) = "cosmos.Int"
+  ];
+  google.protobuf.Timestamp created_at = 6 [
     (gogoproto.nullable) = false,
     (gogoproto.stdtime) = true
   ];

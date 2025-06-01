@@ -7,11 +7,10 @@ import (
 )
 
 func (k Keeper) InitGenesis(ctx context.Context, genState types.GenesisState) {
-	// set the PoolId start from the 1
-	if err := k.PoolId.Set(ctx, 1); err != nil {
+	if err := k.PoolId.Set(ctx, 0); err != nil {
 		panic(err)
 	}
-	if err := k.DepositId.Set(ctx, 1); err != nil {
+	if err := k.DepositId.Set(ctx, 0); err != nil {
 		panic(err)
 	}
 

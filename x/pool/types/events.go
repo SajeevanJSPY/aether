@@ -2,7 +2,7 @@ package types
 
 const (
 	EventPoolCreated = "pool_created"
-	EventPoolRemoved = "pool_created"
+	EventPoolRemoved = "pool_removed"
 	EventDeposited   = "deposited"
 	EventWithdrawed  = "withdrawed"
 

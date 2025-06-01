@@ -22,6 +22,13 @@ func (k Keeper) NextPoolId(ctx context.Context) (poolId uint64) {
 	return poolId
 }
 
+func (k Keeper) SetPool(ctx context.Context, poolId uint64, pool types.Pool) {
+	err := k.Pools.Set(ctx, poolId, pool)
+	if err != nil {
+		panic(err)
+	}
+}
+
 func (k Keeper) GetPool(ctx context.Context, poolId uint64) *types.Pool {
 	if poolId > k.CurrentPoolId(ctx) {
 		panic("pool id out of range")

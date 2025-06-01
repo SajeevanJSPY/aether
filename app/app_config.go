@@ -73,10 +73,10 @@ import (
 	aethermoduletypes "github.com/aether-proj/aether/x/aether/types"
 	_ "github.com/aether-proj/aether/x/fee/module"
 	feemoduletypes "github.com/aether-proj/aether/x/fee/types"
-	_ "github.com/aether-proj/aether/x/pool/module"
-	poolmoduletypes "github.com/aether-proj/aether/x/pool/types"
 	_ "github.com/aether-proj/aether/x/perp/module"
 	perpmoduletypes "github.com/aether-proj/aether/x/perp/types"
+	_ "github.com/aether-proj/aether/x/pool/module"
+	poolmoduletypes "github.com/aether-proj/aether/x/pool/types"
 )
 
 var (
