@@ -1,0 +1,76 @@
+syntax = "proto3";
+package aether.perp.v1;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+import "cosmos/base/v1beta1/coin.proto";
+
+option go_package = "github.com/aether-proj/aether/x/perp/types";
+
+service Query {
+  rpc GetPosition(QueryGetPositionRequest) returns (QueryGetPositionResponse);
+  rpc GetLiquidity(QueryLiquidityRequest) returns (QueryLiquidityResponse);
+  rpc GetLiquidationCandidates(QueryGetLiquidationCandidatesRequest) returns (QueryGetLiquidationCandidatesResponse);
+  rpc GetFundingRate(QueryGetFundingRateRequest) returns (QueryGetFundingRateResponse);
+  rpc GetPositionFundingInfo(QueryGetPositionFundingInfoRequest) returns (QueryGetPositionFundingInfoResponse);
+  rpc GetAccruedFunding(QueryGetAccruedFundingRequest) returns (QueryGetAccruedFundingResponse);
+}
+
+message QueryGetPositionRequest {
+  string position_id = 1;
+}
+
+message QueryGetPositionResponse {
+  string trader = 1;
+  bool is_long = 2;
+  string size = 3;
+  cosmos.base.v1beta1.DecCoin margin = 4;
+}
+
+message QueryLiquidityRequest {
+  string address = 1;
+}
+
+message QueryLiquidityResponse {
+  string shares = 1 [
+    (gogoproto.nullable) = false,
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (cosmos_proto.scalar) = "cosmos.Dec"
+  ];
+}
+
+message QueryGetLiquidationCandidatesRequest {}
+
+message QueryGetLiquidationCandidatesResponse {
+  repeated string candidates = 1;
+}
+
+message QueryGetFundingRateRequest {}
+
+message QueryGetFundingRateResponse {
+  string funding_rate = 1 [
+    (gogoproto.nullable) = false,
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (cosmos_proto.scalar) = "cosmos.Dec"
+  ];
+}
+
+message QueryGetPositionFundingInfoRequest {}
+
+message QueryGetPositionFundingInfoResponse {
+  string funding_rate = 1 [
+    (gogoproto.nullable) = false,
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (cosmos_proto.scalar) = "cosmos.Dec"
+  ];
+}
+
+message QueryGetAccruedFundingRequest {}
+
+message QueryGetAccruedFundingResponse {
+  string accrued_funding = 1 [
+    (gogoproto.nullable) = false,
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (cosmos_proto.scalar) = "cosmos.Dec"
+  ];
+}

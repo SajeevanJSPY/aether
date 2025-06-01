@@ -1,0 +1,12 @@
+syntax = "proto3";
+package aether.perp.v1;
+
+import "aether/perp/v1/params.proto";
+
+option go_package = "github.com/aether-proj/aether/x/perp/types";
+
+
+message GenesisState {
+  Params params = 1;
+}
+

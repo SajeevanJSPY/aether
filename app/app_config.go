@@ -75,6 +75,8 @@ import (
 	feemoduletypes "github.com/aether-proj/aether/x/fee/types"
 	_ "github.com/aether-proj/aether/x/pool/module"
 	poolmoduletypes "github.com/aether-proj/aether/x/pool/types"
+	_ "github.com/aether-proj/aether/x/perp/module"
+	perpmoduletypes "github.com/aether-proj/aether/x/perp/types"
 )
 
 var (
@@ -174,6 +176,7 @@ var (
 						aethermoduletypes.ModuleName,
 						feemoduletypes.ModuleName,
 						poolmoduletypes.ModuleName,
+						perpmoduletypes.ModuleName,
 					},
 				}),
 			},
@@ -280,6 +283,10 @@ var (
 			{
 				Name:   poolmoduletypes.ModuleName,
 				Config: appconfig.WrapAny(&poolmoduletypes.Module{}),
+			},
+			{
+				Name:   perpmoduletypes.ModuleName,
+				Config: appconfig.WrapAny(&perpmoduletypes.Module{}),
 			},
 		},
 	})

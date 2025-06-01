@@ -1,0 +1,111 @@
+syntax = "proto3";
+package aether.perp.v1;
+
+import "gogoproto/gogo.proto";
+import "amino/amino.proto";
+import "cosmos_proto/cosmos.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos/msg/v1/msg.proto";
+
+option go_package = "github.com/aether-proj/aether/x/perp/types";
+
+
+service Msg {
+  option (cosmos.msg.v1.service) = true;
+
+  rpc OpenPosition(MsgOpenPosition) returns (MsgOpenPositionResponse);
+  rpc ClosePosition(MsgClosePosition) returns (MsgClosePositionResponse);
+  rpc Liquidate(MsgLiquidate) returns (MsgLiquidateResponse);
+  rpc UpdateFundingRate(MsgUpdateFundingRate) returns (MsgUpdateFundingRateResponse);
+  rpc ApplyFundingPayment(MsgApplyFundingPayment) returns (MsgApplyFundingPaymentRespone);
+  rpc SettleFundingPayment(MsgSettleFundingPayment) returns (MsgSettleFundingPaymentResponse);
+}
+
+message MsgOpenPosition {
+  option (amino.name) = "perp/open-position";
+  option (cosmos.msg.v1.signer) = "trader";
+
+  string trader = 1;
+  bool is_long = 2;
+  cosmos.base.v1beta1.DecCoin margin = 3;
+  string leverage = 4 [
+    (gogoproto.nullable) = false,
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (cosmos_proto.scalar) = "cosmos.Dec"
+  ];
+  uint64 pool_id = 5;
+}
+
+message MsgOpenPositionResponse {
+  uint64 position_id = 1;
+}
+
+
+message MsgClosePosition {
+  option (amino.name) = "perp/close-position";
+  option (cosmos.msg.v1.signer) = "trader";
+
+  string trader = 1;
+  uint64 position_id = 2;
+}
+
+message MsgClosePositionResponse {}
+
+
+message MsgLiquidate {
+  option (amino.name) = "perp/liquidate";
+  option (cosmos.msg.v1.signer) = "liquidator";
+
+  string liquidator = 1;
+  uint64 position_id = 2;
+}
+
+message MsgLiquidateResponse {}
+
+message MsgUpdateFundingRate {
+  option (amino.name) = "perp/update-funding-rate";
+  option (cosmos.msg.v1.signer) = "trader";
+
+  string trader = 1;
+  uint64 pool_id = 2;
+  string funding_rate = 3 [
+    (gogoproto.nullable) = false,
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (cosmos_proto.scalar) = "cosmos.Dec"
+  ];
+  string funding_index = 4 [
+    (gogoproto.nullable) = false,
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (cosmos_proto.scalar) = "cosmos.Dec"
+  ];
+}
+
+message MsgUpdateFundingRateResponse {}
+
+
+message MsgApplyFundingPayment {
+  option (amino.name) = "perp/apply-funding-payment";
+  option (cosmos.msg.v1.signer) = "trader";
+
+  string trader = 1;
+  repeated uint64 position_ids = 2;
+}
+
+message MsgApplyFundingPaymentRespone {}
+
+
+message MsgSettleFundingPayment {
+  option (amino.name) = "perp/settle-funding-payment";
+  option (cosmos.msg.v1.signer) = "trader";
+
+  string trader = 1;
+  uint64 position_id = 2;
+  string amount = 3 [
+    (gogoproto.nullable) = false,
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (cosmos_proto.scalar) = "cosmos.Dec"
+  ];
+}
+
+message MsgSettleFundingPaymentResponse {}
+
