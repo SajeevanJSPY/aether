@@ -3,6 +3,8 @@ package keeper
 import (
 	"context"
 
+	"cosmossdk.io/math"
+
 	"github.com/aether-proj/aether/x/pool/types"
 )
 
@@ -38,4 +40,19 @@ func (k Keeper) GetPool(ctx context.Context, poolId uint64) *types.Pool {
 		panic(err)
 	}
 	return &val
+}
+
+func (k Keeper) CalculateShares(totalAmount math.Int, totalShares math.Int, depositAmount math.Int) math.Int {
+	if totalShares.IsZero() {
+		return depositAmount
+	}
+
+	contributionDec := math.LegacyNewDecFromInt(depositAmount)
+	totalTokensDec := math.LegacyNewDecFromInt(totalAmount)
+	totalSharesDec := math.LegacyNewDecFromInt(totalShares)
+
+	shareRatio := contributionDec.Quo(totalTokensDec)
+	shareDec := shareRatio.Mul(totalSharesDec)
+
+	return shareDec.TruncateInt()
 }

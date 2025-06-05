@@ -43,6 +43,7 @@ type Keeper struct {
 	authority []byte
 
 	AccountKeeper types.AccountKeeper
+	BankKeeper    types.BankKeeper
 
 	Schema    collections.Schema
 	Params    collections.Item[types.Params]

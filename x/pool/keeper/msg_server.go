@@ -73,8 +73,47 @@ func (m msgServer) RemovePool(goCtx context.Context, req *types.MsgRemovePool) (
 }
 
 func (m msgServer) Deposit(goCtx context.Context, req *types.MsgDeposit) (*types.MsgDepositResponse, error) {
+	if req == nil {
+		panic("request is invalid")
+	}
+	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	return &types.MsgDepositResponse{}, nil
+	depositor, err := m.Keeper.ValidateSender(ctx, req.Depositor)
+	if err != nil {
+		return nil, err
+	}
+
+	poolInfo := m.Keeper.GetPool(ctx, req.PoolId)
+	balance := m.Keeper.BankKeeper.GetBalance(ctx, depositor, poolInfo.TotalAmount.GetDenom())
+
+	if poolInfo.IsPaused {
+		return nil, types.ErrPoolPaused
+	}
+
+	depositAmount := req.DepositAmount
+
+	if depositAmount.GT(balance.Amount) {
+		return nil, fmt.Errorf("your bank balance is lesser than the deposit amount")
+	}
+
+	amount := sdk.NewCoin(poolInfo.TotalAmount.GetDenom(), depositAmount)
+
+	// send tokens from user to the protocol
+	m.Keeper.BankKeeper.SendCoinsFromAccountToModule(ctx, depositor, types.ModuleName, []sdk.Coin{amount})
+
+	shares := m.Keeper.CalculateShares(poolInfo.TotalAmount.Amount.TruncateInt(), poolInfo.TotalShares, depositAmount)
+
+	m.Keeper.SetDeposit(ctx, depositor.String(), shares, req.PoolId)
+
+	ctx.EventManager().EmitEvent(sdk.NewEvent(
+		types.EventDeposited,
+		sdk.NewAttribute(types.AttributePoolId, fmt.Sprintf("%d", req.PoolId)),
+		sdk.NewAttribute(types.AttributeShares, shares.String()),
+	))
+
+	return &types.MsgDepositResponse{
+		Shares: shares,
+	}, nil
 }
 
 func (m msgServer) Withdraw(goCtx context.Context, req *types.MsgWithdraw) (*types.MsgWithdrawResponse, error) {
